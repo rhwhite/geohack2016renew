@@ -1,0 +1,14 @@
+Converting from shp file to displaying in GEE.
+
+1. Read in shp file using Google Earth pro. Right click, save data as, saves as kml file.
+2. In your google drive, select new, Google Fusion Table; select kml file; check it looks reasonable; add any meta data; click done.
+3. Get ID for fusion table: File, About this table, copy ID
+4. Read into GEE: var powerp = ee.FeatureCollection('ft:ID_copied_from_step_3') 
+  (you need the ft: at the beginning of this)
+5. Display: Map.addLayer(powerp,{},'powerp')
+6. If you have a Fusion table that GEE interprets correctly, this should be sufficient. BUT: this particular data does not display properly automatically.
+Issues exist with Longitude/Latitude/Geometry. So you need to edit the Fusion table in google drive
+7. Open fusion table in google drive: Select fusion table. Edit, change columns. Use the crosses to remove superfluous columns - it looks like ones that have a 'Location' datatype, but aren't Latitude, Longitude or geometry, are confusing GEE: e.g. State and City. Perhaps if it has two different Location points (e.g. geometry vs State), it doesn't know which to plot it at?
+8. Reload in GEE, and display.
+
+  
