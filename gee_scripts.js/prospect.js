@@ -70,5 +70,15 @@ Map.addLayer(justSolar,{color:'orange'},'Solar', false)
 Map.addLayer(justWind,{color:'blue'},'Wind', false)
 
 //---------------// PLOTTING MASKS //---------------//
-Map.addLayer(slope.mask(slope.gt(45)), {palette:'gray'}, 'Elevation Mask')
-Map.addLayer(elevation.mask(elevation.gt(2000)), {palette:'white'}, 'Elevation Mask')
+Map.addLayer(slope.mask(slope.gt(45)), {palette:'gray'}, 'Elevation Mask');
+Map.addLayer(elevation.mask(elevation.gt(2000)), {palette:'white'}, 'Elevation Mask');
+
+//---------------// EXPORT PREDICTORS //---------------//
+// change conditional to true if you want to export predictor data
+if (false) {
+Export.table.toDrive({
+collection: predictors,
+description: 'exportVolumes',
+fileFormat: 'CSV'
+});
+}
