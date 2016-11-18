@@ -33,14 +33,14 @@ A hack week project to locate optimal sites for renewable energy power plants us
 	`var training = predictors.sampleRegions(allRenewables, ['nameindex'], 30);`
 4. Feed the training data to a random forest classifier.
 	* GEE prospector.js:  
-	var bands_more = ['vs',
+	`var bands_more = ['vs',
             'srad',
             'elevation',
             'aspect',
             'slope',
             'b1',
             'b1_1'
-            ]; 
+            ];`  
 	* GEE prospector.js:  
 	`var trained_more = ee.Classifier.randomForest({numberOfTrees:500, bagFraction:0.63, outOfBagMode:true}).train(training, 'nameindex', bands_more);`
 5. Use the trained classifier to predict which of the 3 types of renewable energy would be best suited to land across the US.
