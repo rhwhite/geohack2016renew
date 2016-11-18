@@ -26,7 +26,7 @@ A hack week project to locate optimal sites for renewable energy power plants us
 2. Locate sites of existing renewable energy power plants (solar, wind and geothermal).
 	Power plant locations (U.S.A) were sourced from: http://www.eia.gov/maps/layer_info-m.php. The columns retained for this study are station id, lat, long, solar_MW, wind_MW and geo_MW and a new column powerplant_MW that lists the maximum MW (Mega-Watt) value of the three and so shows where there is a powerplant of this type and the MW. The csv file was converted to a shapefile (.shp) using QGIS and interpolated using IDW in ArcGIS to produce a raster (.tif).
 
-	To upload to GEE, the shp file was read into Google Earth Pro, and save as a kml file. This was read into Google Drive as a Fusion Table. NOTE: in order to work correctly in GEE, columns with 'location' data type that are not lat or lon (e.g. State, City) are removed from the Fusion Table. This Fusion Table can then be read into GEE.
+	To upload to GEE, the shp file was read into Google Earth Pro, and save as a kml file. This was read into Google Drive as a Fusion Table. NOTE: in order to work correctly in GEE, columns with 'location' data type that are not lat or lon (e.g. State, City) are removed from the Fusion Table. This Fusion Table can then be correctly read by GEE.
 	
 3. Extract a list of feature values at pixels where renewable energy plants are located to form a training dataset.
 	* GEE prospector.js:  
