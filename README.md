@@ -53,7 +53,7 @@ A hack week project to locate optimal sites for renewable energy power plants us
 		mask = mask.paint(usBoundary, 1);  
 		classified_more = classified_more.updateMask(mask);`  
 	* Forest canopy, water, impervious surfaces:  
-		from [USGS/NLCD/NLCD2011](https://code.earthengine.google.com/dataset/USGS/NLCD)
+		from [USGS/NLCD/NLCD2011](https://code.earthengine.google.com/dataset/USGS/NLCD)  
 		GEE prospector.js examples:  
 		`Map.addLayer(slope.mask(slope.gt(slopeThreshold)), {palette:'gray'}, 'Slope Mask');`  
 		`Map.addLayer(forestmask,{palette:'088d00'},'Forest Mask 50%',false);`  
