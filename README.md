@@ -4,6 +4,5 @@ A hack week project to locate optimal sites for renewable energy power plants us
 
 [Renewable Prospecting Hackpad](https://hackpad.com/Locating-sites-for-renewable-energy-systems-oQpOwjD8Pts)
 
-## Installing the Conda Environment
-
-`conda env create -f <directory to renewableenv.yml>`
+## Google Earth Engine Script
+[Link to final version](https://code.earthengine.google.com/2aedec5fe5afc721e827c75dac224167)
