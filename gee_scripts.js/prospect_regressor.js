@@ -5,8 +5,8 @@ var fusionTable = ee.FeatureCollection("ft:1EMpOeVWKIRau3LGoBmPaezI4_XRHXvAsAOfw
     PP = ee.FeatureCollection("ft:1HYT3PAAc2JtCfolvBPNqUINBdKmEiPSaL5726fPD"),
     landCover2011 = ee.Image("USGS/NLCD/NLCD2011"),
     thermal = ee.Image("users/samhooperstudio/thermal_gradient"),
-    pop = ee.Image("users/samhooperstudio/population");
-
+    pop = ee.Image("users/samhooperstudio/population"),
+    reserveland = ee.FeatureCollection("ft:1h1EF1wI96fd9CW-S3LOPP_Pn4UdpmlwroqDE_7wc");
 //---------------// PARAMETERS //---------------//
 var forestthreshold = 50  // threshold for masking out forest area
 var imperviousthreshold = 30 // threshold for masking out impervious areas
@@ -154,6 +154,8 @@ Map.addLayer(slope.mask(slope.gt(slopeThreshold)), {palette:'gray'}, 'Elevation 
 Map.addLayer(forestmask,{},'Forest Mask', false);
 Map.addLayer(imperviousmask,{},'Impervious Mask', false);
 Map.addLayer(watermask,{palette:'9bbff4'},'Water Mask');
+Map.addLayer(reserveland,{color:'purple',opacity:0},'Reserve Mask',false)
+
 
 //---------------// EXPORT PREDICTORS //---------------//
 // change conditional to true if you want to export predictor data
