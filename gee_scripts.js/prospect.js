@@ -107,7 +107,7 @@ classified_more = classified_more.updateMask(mask)
 // plot predicted map!
 //Map.addLayer(classified, {min: 0, max: 2, palette: ['blue', 'yellow', 'red']},
 //  'classification');
-Map.addLayer(classified_more, {min: 0, max: 2, palette: ['6cc0e5', 'fbc93d', 'fb4f4f']},
+Map.addLayer(classified_more, {min: 0, max: 2, palette: ['5e93ca', 'fbc93d', 'fb4f4f']},
   'classification_more');
 // plot existing renewable sites
 Map.addLayer(justGeo,{color:'red'},'Geothermal', false);
