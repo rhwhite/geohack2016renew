@@ -5,6 +5,8 @@ A hack week project to locate optimal sites for renewable energy power plants us
 ## Methodology
 
 1. Load satellite and ground based datasets of features considered useful for determining renewable energy potential (eg. solar irradiance, wind speed).
+- solar irradiance: GRIDMET: University of Idaho Gridded Surface Meteorological Dataset https://code.earthengine.google.com/dataset/IDAHO_EPSCOR/GRIDMET
+    4km resolution, srad: surface downward shortwave radiation (W/m^2)
 2. Locate sites of existing renewable energy power plants (solar, wind and geothermal).
 3. Extract a list of feature values at pixels where renewable energy plants are located to form a training dataset.
 4. Feed the training data to a random forest classifier.
