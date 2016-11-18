@@ -20,7 +20,7 @@ var justWind = PP.filter(ee.Filter.eq('PrimSource','wind'));
 var allRenewables = justSolar.merge(justGeo).merge(justWind);
 var windSample = allRenewables.remap([0, 1, 2], [1, 0, 0], 'nameindex');
 var solarSample = allRenewables.remap([0, 1, 2], [0, 1, 0], 'nameindex');
-var thermSample = allRenewables.remap([0, 1, 2], [0, 1, 0], 'nameindex');
+var thermSample = allRenewables.remap([0, 1, 2], [0, 0, 1], 'nameindex');
 
 //---------------// MAP BOUNDARY //---------------//
 // import US map boundary
@@ -65,10 +65,6 @@ var predictors = (windspeed
 var bands = ['vs',
             'srad',
             'elevation',
-            ];
-var bands_more = ['vs',
-            'srad',
-            'elevation',
             'aspect',
             'slope',
             'b1',
@@ -84,28 +80,33 @@ var trainingTherm = predictors.sampleRegions(thermSample, ['nameindex'], 30);
 
 // create a trained classifier
 var trainedAll = ee.Classifier.randomForest({numberOfTrees:500, bagFraction:0.63, outOfBagMode:true})
-  .train(trainingAll, 'nameindex', bands_more);
+  .train(trainingAll, 'nameindex', bands);
 var trainedWind = ee.Classifier.randomForest({numberOfTrees:500, bagFraction:0.63, outOfBagMode:true})
   .setOutputMode('REGRESSION')
-  .train(trainingWind, 'nameindex', bands_more);
+  .train(trainingWind, 'nameindex', bands);
 var trainedSolar = ee.Classifier.randomForest({numberOfTrees:500, bagFraction:0.63, outOfBagMode:true})
   .setOutputMode('REGRESSION')
-  .train(trainingSolar, 'nameindex', bands_more);
+  .train(trainingSolar, 'nameindex', bands);
 var trainedTherm = ee.Classifier.randomForest({numberOfTrees:500, bagFraction:0.63, outOfBagMode:true})
   .setOutputMode('REGRESSION')
-  .train(trainingTherm, 'nameindex', bands_more);
+  .train(trainingTherm, 'nameindex', bands);
 
 // classify rest of the map based on bands using the trained classifier
-var classifiedAll = predictors.select(bands_more).classify(trainedAll);
-var classifiedWind = predictors.select(bands_more).classify(trainedWind);
-var classifiedSolar = predictors.select(bands_more).classify(trainedSolar);
-var classifiedTherm = predictors.select(bands_more).classify(trainedTherm);
+var classifiedAll = predictors.select(bands).classify(trainedAll);
+var classifiedWind = predictors.select(bands).classify(trainedWind);
+var classifiedSolar = predictors.select(bands).classify(trainedSolar);
+var classifiedTherm = predictors.select(bands).classify(trainedTherm);
 
 // Build a composite of the max suitability for all three types
-var suitability = ee.Image(classifiedWind)
+/*var suitability = ee.Image(classifiedWind)
   .addBands(classifiedSolar)
   .addBands(classifiedTherm)
-  .reduce('max');
+  .reduce('max');*/
+var suitability = classifiedAll
+  .where(classifiedAll.eq(0), classifiedWind)
+  .where(classifiedAll.eq(1), classifiedSolar)
+  .where(classifiedAll.eq(2), classifiedTherm);
+
 
 // Get a confusion matrix representing resubstitution accuracy.
 var trainAccuracy = trainedAll.confusionMatrix();
@@ -131,7 +132,7 @@ classifiedAll = classifiedAll.updateMask(mask);
 classifiedWind = classifiedWind.updateMask(mask);
 classifiedSolar = classifiedSolar.updateMask(mask);
 classifiedTherm = classifiedTherm.updateMask(mask);
-sutiability = suitability.updateMask(mask);
+suitability = suitability.updateMask(mask);
 // plot predicted map!
 //Map.addLayer(classified, {min: 0, max: 2, palette: ['blue', 'yellow', 'red']},
 //  'classification');
@@ -141,7 +142,7 @@ Map.addLayer(classifiedWind, {min:0, max:1}, 'wind suitability', false);
 Map.addLayer(classifiedSolar, {min:0, max:1}, 'solar suitability', false);
 Map.addLayer(classifiedTherm, {min:0, max:1}, 'geothermal suitability', false);
 Map.addLayer(suitability, {min:0, max:1}, 'suitability');
-Map.addLayer(classifiedAll, {min: 0, max: 2, palette: ['blue', 'yellow','red'], alpha:0.5}, 'classification_more');
+Map.addLayer(classifiedAll, {min: 0, max: 2, palette: ['blue', 'yellow','red'], opacity:0.5}, 'classification_more');
 // plot existing renewable sites
 Map.addLayer(justGeo,{color:'yellow'},'Geothermal', false);
 Map.addLayer(justSolar,{color:'orange'},'Solar', false);
@@ -150,8 +151,8 @@ Map.addLayer(justWind,{color:'blue'},'Wind', false);
 //---------------// PLOTTING MASKS //---------------//
 Map.addLayer(slope.mask(slope.gt(slopeThreshold)), {palette:'gray'}, 'Elevation Mask');
 //Map.addLayer(elevation.mask(elevation.gt(2000)), {palette:'white'}, 'Elevation Mask');
-Map.addLayer(forestmask,{},'Forest Mask');
-Map.addLayer(imperviousmask,{},'Impervious Mask');
+Map.addLayer(forestmask,{},'Forest Mask', false);
+Map.addLayer(imperviousmask,{},'Impervious Mask', false);
 Map.addLayer(watermask,{palette:'9bbff4'},'Water Mask');
 
 //---------------// EXPORT PREDICTORS //---------------//
@@ -163,3 +164,4 @@ description: 'trainingData',
 fileFormat: 'CSV'
 });
 }
+
