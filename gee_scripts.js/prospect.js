@@ -107,19 +107,19 @@ classified_more = classified_more.updateMask(mask)
 // plot predicted map!
 //Map.addLayer(classified, {min: 0, max: 2, palette: ['blue', 'yellow', 'red']},
 //  'classification');
-Map.addLayer(classified_more, {min: 0, max: 2, palette: ['blue', 'yellow', 'red']},
+Map.addLayer(classified_more, {min: 0, max: 2, palette: ['6cc0e5', 'fbc93d', 'fb4f4f']},
   'classification_more');
 // plot existing renewable sites
-Map.addLayer(justGeo,{color:'yellow'},'Geothermal', false);
-Map.addLayer(justSolar,{color:'orange'},'Solar', false);
+Map.addLayer(justGeo,{color:'red'},'Geothermal', false);
+Map.addLayer(justSolar,{color:'yellow'},'Solar', false);
 Map.addLayer(justWind,{color:'blue'},'Wind', false);
 
 //---------------// PLOTTING MASKS //---------------//
 Map.addLayer(slope.mask(slope.gt(slopeThreshold)), {palette:'gray'}, 'Elevation Mask');
 //Map.addLayer(elevation.mask(elevation.gt(2000)), {palette:'white'}, 'Elevation Mask');
-Map.addLayer(forestmask,{},'Forest Mask');
-Map.addLayer(imperviousmask,{},'Impervious Mask');
-Map.addLayer(watermask,{palette:'9bbff4'},'Water Mask');
+Map.addLayer(forestmask,{palette:'088d00'},'Forest Mask');
+Map.addLayer(imperviousmask,{palette:'gray'},'Impervious Mask');
+Map.addLayer(watermask,{palette:'94BFFF'},'Water Mask');
 
 //---------------// EXPORT PREDICTORS //---------------//
 // change conditional to true if you want to export predictor data
