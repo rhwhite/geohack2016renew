@@ -91,7 +91,13 @@ print('Resubstitution error matrix: ', trainAccuracy);
 print('Training overall accuracy: ', trainAccuracy.consumersAccuracy());
 var trainAccuracy_more = trained_more.confusionMatrix();
 print('Resubstitution error matrix using more data: ', trainAccuracy_more);
-print('Training overall accuracy using more data: ', trainAccuracy_more.consumersAccuracy());
+print('Training overall accuracy using more data: ', trainAccuracy_more.accuracy());
+//Kappa coefficient == overall accuracy considering random chance of agreement
+print('Kappa: ', trainAccuracy_more.kappa());
+//User's accuracy == rate at which map agreed with training data per class
+print("User's accuracy: ", trainAccuracy_more.consumersAccuracy());
+//Producer's accuracy == rate at which training data agreed with map per class
+print("Producer's accuracy: ", trainAccuracy_more.producersAccuracy());
 
 
 //---------------// PRINTING //---------------//
