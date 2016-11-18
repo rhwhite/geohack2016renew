@@ -49,9 +49,11 @@ A hack week project to locate optimal sites for renewable energy power plants us
 6. Mask U.S. and areas of importance or impracticality (eg. forest canopy, water, steep slopes, indian reserves, impervious surface (i.e. cities)
 	* U.S. boundaries:  
 		GEE prospector.js:  
-		`var mask = ee.Image.constant(0).int32();  
-		mask = mask.paint(usBoundary, 1);  
-		classified_more = classified_more.updateMask(mask);`  
+		`var country = ee.FeatureCollection('ft:1N2LBk4JHwWpOY4d9fobIn27lfnZ5MDy-NoqqRpk', 'geometry');`   
+		`var usBoundary = country.filter(ee.Filter.eq('ISO_2DIGIT', 'US'));`  
+		`var mask = ee.Image.constant(0).int32();`  
+		`mask = mask.paint(usBoundary, 1);`   
+		`classified_more = classified_more.updateMask(mask);`  
 	* Forest canopy, water, impervious surfaces:  
 		from [USGS/NLCD/NLCD2011](https://code.earthengine.google.com/dataset/USGS/NLCD)  
 		GEE prospector.js examples:  
