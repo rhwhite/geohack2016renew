@@ -5,7 +5,8 @@ var fusionTable = ee.FeatureCollection("ft:1EMpOeVWKIRau3LGoBmPaezI4_XRHXvAsAOfw
     PP = ee.FeatureCollection("ft:1HYT3PAAc2JtCfolvBPNqUINBdKmEiPSaL5726fPD"),
     landCover2011 = ee.Image("USGS/NLCD/NLCD2011"),
     thermal = ee.Image("users/samhooperstudio/thermal_gradient"),
-    pop = ee.Image("users/samhooperstudio/population");
+    pop = ee.Image("users/samhooperstudio/population"),
+    reserveland = ee.FeatureCollection("ft:1h1EF1wI96fd9CW-S3LOPP_Pn4UdpmlwroqDE_7wc");
 
 //---------------// PARAMETERS //---------------//
 var forestthreshold = 50  // threshold for masking out forest area
@@ -90,7 +91,13 @@ print('Resubstitution error matrix: ', trainAccuracy);
 print('Training overall accuracy: ', trainAccuracy.consumersAccuracy());
 var trainAccuracy_more = trained_more.confusionMatrix();
 print('Resubstitution error matrix using more data: ', trainAccuracy_more);
-print('Training overall accuracy using more data: ', trainAccuracy_more.consumersAccuracy());
+print('Training overall accuracy using more data: ', trainAccuracy_more.accuracy());
+//Kappa coefficient == overall accuracy considering random chance of agreement
+print('Kappa: ', trainAccuracy_more.kappa());
+//User's accuracy == rate at which map agreed with training data per class
+print("User's accuracy: ", trainAccuracy_more.consumersAccuracy());
+//Producer's accuracy == rate at which training data agreed with map per class
+print("Producer's accuracy: ", trainAccuracy_more.producersAccuracy());
 
 
 //---------------// PRINTING //---------------//
@@ -115,11 +122,12 @@ Map.addLayer(justSolar,{color:'yellow'},'Solar', false);
 Map.addLayer(justWind,{color:'blue'},'Wind', false);
 
 //---------------// PLOTTING MASKS //---------------//
-Map.addLayer(slope.mask(slope.gt(slopeThreshold)), {palette:'gray'}, 'Elevation Mask');
+Map.addLayer(slope.mask(slope.gt(slopeThreshold)), {palette:'gray'}, 'Slope Mask');
 //Map.addLayer(elevation.mask(elevation.gt(2000)), {palette:'white'}, 'Elevation Mask');
-Map.addLayer(forestmask,{palette:'088d00'},'Forest Mask');
+Map.addLayer(forestmask,{palette:'088d00'},'Forest Mask 50%',false);
 Map.addLayer(imperviousmask,{palette:'gray'},'Impervious Mask');
 Map.addLayer(watermask,{palette:'94BFFF'},'Water Mask');
+Map.addLayer(reserveland,{color:'purple',opacity:0},'Reserve Mask',false)
 
 //---------------// EXPORT PREDICTORS //---------------//
 // change conditional to true if you want to export predictor data
