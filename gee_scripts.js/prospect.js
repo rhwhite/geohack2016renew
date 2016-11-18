@@ -3,11 +3,14 @@ var fusionTable = ee.FeatureCollection("ft:1EMpOeVWKIRau3LGoBmPaezI4_XRHXvAsAOfw
     srtm = ee.Image("USGS/SRTMGL1_003"),
     gridmet = ee.ImageCollection("IDAHO_EPSCOR/GRIDMET"),
     PP = ee.FeatureCollection("ft:1HYT3PAAc2JtCfolvBPNqUINBdKmEiPSaL5726fPD"),
-    landCover2011 = ee.Image("USGS/NLCD/NLCD2011");
+    landCover2011 = ee.Image("USGS/NLCD/NLCD2011"),
+    thermal = ee.Image("users/samhooperstudio/thermal_gradient"),
+    pop = ee.Image("users/samhooperstudio/population");
 
 //---------------// PARAMETERS //---------------//
 var forestthreshold = 50  // threshold for masking out forest area
 var imperviousthreshold = 30 // threshold for masking out impervious areas
+var slopeThreshold = 45
 
 //---------------// DATA //---------------//
 // extract only renewables from data and merge into one featureCollection
@@ -51,6 +54,8 @@ var predictors = (windspeed
     .addBands(srad)
     .addBands(aspect)
     .addBands(slope)
+    .addBands(thermal)
+    .addBands(pop)
     );
 
 // useful list of band names
@@ -62,7 +67,9 @@ var bands_more = ['vs',
             'srad',
             'elevation',
             'aspect',
-            'slope'
+            'slope',
+            'b1',
+            'b1_1'
             ];
             
 //---------------// CLASSIFICATION //---------------//
@@ -71,7 +78,7 @@ var training = predictors.sampleRegions(allRenewables, ['nameindex'], 30);
 
 // create a trained classifier
 var trained = ee.Classifier.randomForest().train(training, 'nameindex', bands);
-var trained_more = ee.Classifier.randomForest().train(training, 'nameindex', bands_more);
+var trained_more = ee.Classifier.randomForest({numberOfTrees:500, bagFraction:0.63, outOfBagMode:true}).train(training, 'nameindex', bands_more);
 
 // classify rest of the map based on bands using the trained classifier
 var classified = predictors.select(bands).classify(trained);
@@ -98,8 +105,8 @@ mask = mask.paint(usBoundary, 1);
 classified = classified.updateMask(mask)
 classified_more = classified_more.updateMask(mask)
 // plot predicted map!
-Map.addLayer(classified, {min: 0, max: 2, palette: ['blue', 'yellow', 'red']},
-  'classification');
+//Map.addLayer(classified, {min: 0, max: 2, palette: ['blue', 'yellow', 'red']},
+//  'classification');
 Map.addLayer(classified_more, {min: 0, max: 2, palette: ['blue', 'yellow', 'red']},
   'classification_more');
 // plot existing renewable sites
@@ -108,8 +115,8 @@ Map.addLayer(justSolar,{color:'orange'},'Solar', false);
 Map.addLayer(justWind,{color:'blue'},'Wind', false);
 
 //---------------// PLOTTING MASKS //---------------//
-Map.addLayer(slope.mask(slope.gt(45)), {palette:'gray'}, 'Elevation Mask');
-Map.addLayer(elevation.mask(elevation.gt(2000)), {palette:'white'}, 'Elevation Mask');
+Map.addLayer(slope.mask(slope.gt(slopeThreshold)), {palette:'gray'}, 'Elevation Mask');
+//Map.addLayer(elevation.mask(elevation.gt(2000)), {palette:'white'}, 'Elevation Mask');
 Map.addLayer(forestmask,{},'Forest Mask');
 Map.addLayer(imperviousmask,{},'Impervious Mask');
 Map.addLayer(watermask,{palette:'9bbff4'},'Water Mask');
