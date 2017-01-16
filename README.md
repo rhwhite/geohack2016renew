@@ -1,6 +1,11 @@
-﻿# GeoHackWeek 2016 #ReMap Project
+# GeoHackWeek 2016 #Renewables Mapping Project
 
 A hack week project to locate optimal sites for renewable energy power plants using random forest classification and Google Earth Engine (GEE).
+
+## Run the Project
+To run the project:
+1. Create a GEE account.
+2. Copy and paste the code from `gee_scripts/prospect.js` into the GEE code editor and run.
 
 ## Methodology
 
@@ -62,9 +67,7 @@ A hack week project to locate optimal sites for renewable energy power plants us
 		`Map.addLayer(watermask,{palette:'94BFFF'},'Water Mask');`  
 		`Map.addLayer(reserveland,{color:'purple',opacity:0},'Reserve Mask',false);`  		
 
-## Google Earth Engine Script
-[Click here to view and play with the final version of the script in the GEE code editor.](https://code.earthengine.google.com/2aedec5fe5afc721e827c75dac224167)
-
+## Intial Project Development
 [Renewable Prospecting Hackpad](https://hackpad.com/Locating-sites-for-renewable-energy-systems-oQpOwjD8Pts)
 
 
