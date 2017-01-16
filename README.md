@@ -4,6 +4,7 @@ A hack week project to locate optimal sites for renewable energy power plants us
 
 ## Run the Project
 To run the project:
+
 1. Create a GEE account.
 2. Copy and paste the code from `gee_scripts/prospect.js` into the GEE code editor and run.
 
